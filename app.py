@@ -1,58 +1,34 @@
 from bluepy import btle, thingy52
 import binascii
+from multiprocessing import Process, Manager
+import json
 
-# thingy = thingy52.Thingy52(MAC_ADDRESS)
-# thingy.sound.enable()
-# thingy.sound.configure(speaker_mode=0x03)  # 0x03 means sample mode, ref FW doc
-# thingy.sound.play_speaker_sample(1)
-# thingy.disconnect()
+from services.remote_sensors import RemoteSensorService
 
-remote_sensors = [
-    {
-        'name': 'atcthing',
-        'mac_address': 'D8:33:83:2B:A2:E4',
-        'device_profile': 'thingy52',
-        'connected': False
-    }
-]
+from flask import Flask, request, jsonify
 
-def str_to_int(s):
-    """ Transform hex str into int. """
-    i = int(s, 16)
-    if i >= 2**7:
-        i -= 2**8
-    return i 
+app = Flask(__name__, static_url_path='', static_folder='ui')
 
-class NotificationDelegate(btle.DefaultDelegate):
-    def handleNotification(self, hnd, data):
-        if (hnd == thingy52.e_temperature_handle):
-            teptep = binascii.b2a_hex(data)
-            print('Notification: Temp received:  {}.{} degCelsius'.format(
-                        str_to_int(teptep[:-2]), int(teptep[-2:], 16)))
+@app.route('/')
+def home_page():
+    return app.send_static_file('index.html')
 
-def connect_to_sensor(mac_address):
-    print("connecting to " + mac_address)
-    thingy = thingy52.Thingy52(mac_address)
-    thingy.setDelegate(NotificationDelegate())
-    thingy.environment.enable()
-    thingy.environment.configure(temp_int=1000)
-    thingy.environment.set_temperature_notification(True)
-    thingy.waitForNotifications(timeout=5)
-    thingy.waitForNotifications(timeout=5)
-    thingy.waitForNotifications(timeout=5)
+def init_state(state):
+    with open('config/remote_sensors.json') as f:
+        data = json.load(f)
+    # todo set all devices to connected = False
+    state.update({'remote_sensors': data})
 
-    print("# Disconnecting...")
-    thingy.disconnect()
+def setup_sensors(state):
+    p = Process(target=RemoteSensorService, args=(state,))
+    p.start()
 
-def search_for_sensor(sensor):
-    print("# Looking for devices...")
-    scanner = btle.Scanner()
-    le_devices = scanner.scan(timeout=3)
-    for dev in le_devices:
-        # print('\n')
-        print("Device {} ({}), RSSI={} dB".format(dev.addr, dev.addrType, dev.rssi))
-        if sensor['mac_address'].lower() == dev.addr.lower():
-            connect_to_sensor(dev.addr)
-  
 
-search_for_sensor(remote_sensors[0])
+if __name__ == "__main__":
+    with Manager() as manager:
+        state = manager.dict()
+        init_state(state)
+        setup_sensors(state)
+
+
+        app.run(host='0.0.0.0', port=5000)

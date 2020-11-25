@@ -28,3 +28,40 @@ pip install -r requirements.txt
 sudo setcap cap_net_raw+e  ~/.local/lib/python3.7/site-packages/bluepy/bluepy-helper
 sudo setcap cap_net_admin+eip  ~/.local/lib/python3.7/site-packages/bluepy/bluepy-helper
 ```
+
+# Tips
+
+## Setting up onscreen keyboard
+https://github.com/tobykurien/rpi_tablet_os
+
+## Rotating screen
+Depending on the case you have you may need to rotate the display.
+In Terminal, type "sudo nano /boot/config.txt"
+Add the line "lcd_rotate=2" to the top of the file.
+
+## Changing brightness of screen
+current brightness
+cat /sys/class/backlight/rpi_backlight/actual_brightness
+
+Change brightness (0 - 255)
+sudo sh -c 'echo 100 > /sys/class/backlight/rpi_backlight/brightness'
+
+https://github.com/linusg/rpi-backlight
+(Includes how to change permissions to avoid needing to run above commands as root)
+
+## Changing X settings
+Query settings
+xset -d :0 -q
+
+Turn off screen saver
+xset -d :0 s off
+
+Turn off/on screen (sleep is just required when typing in terminal)
+sleep 1; xset -d :0  dpms force off
+sleep 1; xset -d :0  dpms force on
+
+Change screen off time to 10 seconds. Params are standby, suspend, off
+xset dpms -d:0 0 0 10
+
+Turn off screen timeout
+xset dpms -d:0 0 0 0

@@ -29,6 +29,11 @@ sudo setcap cap_net_raw+e  ~/.local/lib/python3.7/site-packages/bluepy/bluepy-he
 sudo setcap cap_net_admin+eip  ~/.local/lib/python3.7/site-packages/bluepy/bluepy-helper
 ```
 
+Allow noble to have run without root 
+```
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+```
+
 # Tips
 
 ## Setting up onscreen keyboard

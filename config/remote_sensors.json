@@ -2,7 +2,6 @@
     {
         "name": "atcthing",
         "mac_address": "D8:33:83:2B:A2:E4",
-        "device_profile": "thingy52",
-        "connected": false
+        "device_profile": "Thingy52"
     }
 ]

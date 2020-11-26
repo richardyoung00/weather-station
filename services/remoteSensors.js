@@ -6,6 +6,7 @@ export class RemoteSensorService {
     constructor(config) {
  
         this.remote_sensors = config.remote_sensors;
+        this.system_settings = config.system_settings;
     }
 
     start() {
@@ -15,7 +16,7 @@ export class RemoteSensorService {
         setInterval(() => {
             this.scanForUnconnectedDevicesAndConnect()
             
-        }, 10000)
+        }, this.system_settings.ble_scan_interval_ms)
         
     }
 
@@ -31,7 +32,6 @@ export class RemoteSensorService {
 
         
         noble.on('discover', (peripheral) => {
-            
             const matchingDevice = unconnectedDevices.find(d => d.mac_address.toLowerCase() === peripheral.address.toLowerCase())
             if (matchingDevice && peripheral.state === 'disconnected' && peripheral.connectable === true) {
                 matchingDevice._peripheral = peripheral;
@@ -64,8 +64,8 @@ export class RemoteSensorService {
         await deviceProfilePeripheral.connectAndSetUp()
         console.log(name + ' connected!');
         deviceConfig._connected = true;
-        await deviceProfilePeripheral.enableTemperatureSensor(10000)
-        await deviceProfilePeripheral.enableHumiditySensor(10000)
+        await deviceProfilePeripheral.enableTemperatureSensor(this.system_settings.remote_sensor_update_interval_ms)
+        await deviceProfilePeripheral.enableHumiditySensor(this.system_settings.remote_sensor_update_interval_ms)
 
     }
 

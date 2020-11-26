@@ -10,7 +10,6 @@ export default class NobleDevice extends events.EventEmitter {
     this._peripheral = peripheral;
     this._services = {};
     this._characteristics = {};
-    console.log('peripheral.id', peripheral)
     this.id = peripheral.id;
     this.uuid = peripheral.uuid; // for legacy
     this.address = peripheral.address;

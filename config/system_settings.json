@@ -1,4 +1,4 @@
 {
-    "ble_scan_interval_ms": 10000,
-    "remote_sensor_update_interval_ms": 5000
+    "ble_scan_interval_ms": 30000,
+    "remote_sensor_update_interval_ms": 30000
 }

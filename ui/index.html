@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" mode="ios">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,49 +9,52 @@
     <link href="node_modules/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
     <link href="dark.css" rel="stylesheet">
 </head>
+
 <body class="dark">
     <ion-app>
         <ion-menu content-id="main-content" role="navigation">
-          <ion-header>
-            <ion-toolbar translucent>
-                <ion-buttons slot="start">
-                    <ion-menu-toggle>
-                      <ion-button>
-                        <ion-icon slot="icon-only" name="close"></ion-icon>
-                      </ion-button>
-                    </ion-menu-toggle>
-                  </ion-buttons>
-              <ion-title>Menu</ion-title>
-            </ion-toolbar>
-          </ion-header>
-      
-          <ion-content>
-            <ion-list>
-              
-            </ion-list>
-          </ion-content>
+            <ion-header>
+                <ion-toolbar translucent>
+                    <ion-buttons slot="start">
+                        <ion-menu-toggle>
+                            <ion-button>
+                                <ion-icon slot="icon-only" name="close"></ion-icon>
+                            </ion-button>
+                        </ion-menu-toggle>
+                    </ion-buttons>
+                    <ion-title>Menu</ion-title>
+                </ion-toolbar>
+            </ion-header>
+
+            <ion-content>
+                <ion-list>
+
+                </ion-list>
+            </ion-content>
         </ion-menu>
-      
+
         <ion-page class="ion-page" id="main-content">
-          <ion-header>
-            <ion-toolbar>
-              <ion-buttons slot="start">
-                <ion-menu-toggle>
-                  <ion-button>
-                    <ion-icon slot="icon-only" name="menu"></ion-icon>
-                  </ion-button>
-                </ion-menu-toggle>
-              </ion-buttons>
-              
-            </ion-toolbar>
-          </ion-header>
-          <ion-content>
-            Content here
-          </ion-content>
+            <ion-header>
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-menu-toggle>
+                            <ion-button>
+                                <ion-icon slot="icon-only" name="menu"></ion-icon>
+                            </ion-button>
+                        </ion-menu-toggle>
+                    </ion-buttons>
+
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
+                <home-page></home-page>
+            </ion-content>
         </ion-page>
-      </ion-app>
-      
-      <ion-menu-controller></ion-menu-controller>
+    </ion-app>
+
+    <ion-menu-controller></ion-menu-controller>
     <script type="module" src="node_modules/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script type="module" src="index.js"></script>
 </body>
+
 </html>

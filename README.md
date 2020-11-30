@@ -48,11 +48,17 @@ Add the line "lcd_rotate=2" to the top of the file.
 current brightness
 cat /sys/class/backlight/rpi_backlight/actual_brightness
 
-Change brightness (0 - 255)
-sudo sh -c 'echo 100 > /sys/class/backlight/rpi_backlight/brightness'
+Change permissions to avoid needing to run commands as root and then reload these rules 
+```
+echo 'SUBSYSTEM=="backlight",RUN+="/bin/chmod 666 /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power"' | sudo tee -a /etc/udev/rules.d/backlight-permissions.rules
 
-https://github.com/linusg/rpi-backlight
-(Includes how to change permissions to avoid needing to run above commands as root)
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+Change brightness (0 - 255)
+```
+echo 100 > /sys/class/backlight/rpi_backlight/brightness
+```
 
 ## Changing X settings
 Query settings

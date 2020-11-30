@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import Router from '@koa/router';
 import { RemoteSensorService }  from './services/remoteSensors.js';
+import { BacklightService }  from './services/backlight.js';
 import { readConfig } from './config/config.js';
 import serve from 'koa-static';
 
@@ -26,6 +27,10 @@ async function main() {
     const config = await readConfig();
     const remoteSensorService = new RemoteSensorService(config);
     remoteSensorService.start()
+
+    const backlightService = new BacklightService(config);
+    backlightService.start()
+    
     setupWebServer()
 }
 

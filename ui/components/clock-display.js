@@ -3,18 +3,26 @@ const template = (obj) => /*html*/
 <style>
     :host {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         height: 100%;
         align-items: center;
         justify-content: center;
-        font-size: 7rem;
         flex: 40;
+    }
+
+    #time {
+        font-size: 7rem;
+    }
+
+    #date {
+        font-size: 1.3em;
     }
 
 
 </style>
 
 <div id="time">00:00</div>
+<div id="date">Monday 30 November 2020</div>
 
 
 `
@@ -34,6 +42,7 @@ customElements.define('clock-display',
             let dateTime = new Date();
             const timeString = dateTime.toLocaleTimeString().slice(0, 5)
             this.shadow.querySelector('#time').innerText = timeString
+            this.shadow.querySelector('#date').innerText = dateTime.toDateString()
         }
 
         start() {

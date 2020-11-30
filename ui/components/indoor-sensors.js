@@ -7,7 +7,7 @@ const template = (obj) => /*html*/
         height: 100%;
         align-items: center;
         justify-content: center;
-        flex: 60;
+        flex: 50;
     }
 
 

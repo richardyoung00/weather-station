@@ -7,7 +7,7 @@ const template = (obj) => /*html*/
         height: 100%;
         align-items: center;
         justify-content: center;
-        flex: 40;
+        flex: 50;
     }
 
     #time {
@@ -15,14 +15,14 @@ const template = (obj) => /*html*/
     }
 
     #date {
-        font-size: 1.3em;
+        font-size: 1.8em;
     }
 
 
 </style>
 
-<div id="time">00:00</div>
-<div id="date">Monday 30 November 2020</div>
+<div id="time"></div>
+<div id="date"></div>
 
 
 `
@@ -46,6 +46,7 @@ customElements.define('clock-display',
         }
 
         start() {
+            this.renderTime()
             setInterval(() => this.renderTime(), 1000)
         }
 

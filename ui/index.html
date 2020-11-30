@@ -8,6 +8,15 @@
 
     <link href="node_modules/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
     <link href="dark.css" rel="stylesheet">
+
+    <style>
+        .menu-button {
+            position: absolute;
+            top: 6px;
+            left: 0px;
+            
+        }
+    </style>
 </head>
 
 <body class="dark">
@@ -34,9 +43,9 @@
         </ion-menu>
 
         <ion-page class="ion-page" id="main-content">
-            <ion-header>
-                <ion-toolbar>
-                    <ion-buttons slot="start">
+            <!-- <ion-header> -->
+                <!-- <ion-toolbar> -->
+                    <ion-buttons slot="start" class="menu-button">
                         <ion-menu-toggle>
                             <ion-button>
                                 <ion-icon slot="icon-only" name="menu"></ion-icon>
@@ -44,8 +53,8 @@
                         </ion-menu-toggle>
                     </ion-buttons>
 
-                </ion-toolbar>
-            </ion-header>
+                <!-- </ion-toolbar> -->
+            <!-- </ion-header> -->
             <ion-content>
                 <home-page></home-page>
             </ion-content>

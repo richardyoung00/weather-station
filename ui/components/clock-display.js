@@ -40,7 +40,7 @@ customElements.define('clock-display',
 
         renderTime() {
             let dateTime = new Date();
-            const timeString = dateTime.toLocaleTimeString().slice(0, 5)
+            const timeString = dateTime.toLocaleTimeString('en-ZA').slice(0, 5)
             this.shadow.querySelector('#time').innerText = timeString
             this.shadow.querySelector('#date').innerText = dateTime.toDateString()
         }

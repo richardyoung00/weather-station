@@ -4,17 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-control" content="no-cache">
     <title>Weather Station</title>
 
     <link href="node_modules/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
     <link href="dark.css" rel="stylesheet">
 
     <style>
+
+       
         .menu-button {
             position: absolute;
             top: 6px;
             left: 0px;
-            
+
+        }
+
+        .refresh-button {
+            position: absolute;
+            top: 6px;
+            right: 0px;
+        }
+
+        ion-content {
+            --overflow: hidden;
         }
     </style>
 </head>
@@ -44,16 +57,22 @@
 
         <ion-page class="ion-page" id="main-content">
             <!-- <ion-header> -->
-                <!-- <ion-toolbar> -->
-                    <ion-buttons slot="start" class="menu-button">
-                        <ion-menu-toggle>
-                            <ion-button>
-                                <ion-icon slot="icon-only" name="menu"></ion-icon>
-                            </ion-button>
-                        </ion-menu-toggle>
-                    </ion-buttons>
+            <!-- <ion-toolbar> -->
+            <ion-buttons slot="start" class="menu-button">
+                <ion-menu-toggle>
+                    <ion-button>
+                        <ion-icon slot="icon-only" name="menu"></ion-icon>
+                    </ion-button>
+                </ion-menu-toggle>
+            </ion-buttons>
 
-                <!-- </ion-toolbar> -->
+            <ion-buttons slot="primary" class="refresh-button">
+                <ion-button id="upload-button">
+                    <ion-icon slot="icon-only" name="refresh"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+
+            <!-- </ion-toolbar> -->
             <!-- </ion-header> -->
             <ion-content>
                 <home-page></home-page>

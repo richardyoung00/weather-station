@@ -31,7 +31,7 @@ export class RemoteSensorService {
         console.log(`Looking for ${unconnectedDevices.length} devices`)
 
         
-        noble.on('discover', (peripheral) => {
+        noble.once('discover', (peripheral) => {
             const matchingDevice = unconnectedDevices.find(d => d.mac_address.toLowerCase() === peripheral.address.toLowerCase())
             if (matchingDevice && peripheral.state === 'disconnected' && peripheral.connectable === true) {
                 matchingDevice._peripheral = peripheral;

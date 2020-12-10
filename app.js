@@ -6,8 +6,20 @@ import { LightSensorService }  from './services/local_sensors/lightSensor.js';
 import { readConfig } from './config/config.js';
 import serve from 'koa-static';
 
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+
+
 const app = new Koa();
 const router = new Router();
+
+const httpServer = createServer(app.callback());
+const io = new Server(httpServer);
+
+io.on('connection', socket => { 
+    console.log("client connected")
+ });
 
 function setupWebServer() {
     router.get('/', (ctx, next) => {
@@ -20,13 +32,17 @@ function setupWebServer() {
     
     const PORT = 3000;
     console.log("Server started on port " + PORT)
-    app.listen(PORT);
+    httpServer.listen(PORT);
 }
 
 
 async function main() {
     const config = await readConfig();
     const remoteSensorService = new RemoteSensorService(config);
+    remoteSensorService.on('sensor_value', ({value, type, device}) => {
+        console.log(value, type, device)
+        io.emit("sensor_value", {value, type, device, source: "remote"});
+    })
     remoteSensorService.start()
 
     const backlightService = new BacklightService(config);

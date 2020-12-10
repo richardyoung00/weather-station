@@ -1,10 +1,12 @@
 import noble from '@abandonware/noble';
 import * as deviceProfiles from '../device_profiles/profiles.js'
+import events from 'events';
 
-export class RemoteSensorService {
+
+export class RemoteSensorService extends events.EventEmitter  {
 
     constructor(config) {
- 
+        super();
         this.remote_sensors = config.remote_sensors;
         this.system_settings = config.system_settings;
     }
@@ -30,12 +32,14 @@ export class RemoteSensorService {
 
         console.log(`Looking for ${unconnectedDevices.length} devices`)
 
-        
-        noble.once('discover', (peripheral) => {
+        //todo need to prevent memory leak by added more listeners
+        noble.on('discover', (peripheral) => {
             const matchingDevice = unconnectedDevices.find(d => d.mac_address.toLowerCase() === peripheral.address.toLowerCase())
             if (matchingDevice && peripheral.state === 'disconnected' && peripheral.connectable === true) {
                 matchingDevice._peripheral = peripheral;
                 this.connect(matchingDevice);
+            } else if (matchingDevice) {
+                console.log("Found device but is not connectable", peripheral.state, peripheral.connectable )
             }
         });
 
@@ -54,11 +58,11 @@ export class RemoteSensorService {
         });
         
         deviceProfilePeripheral.on('temperatureNotif', (temp) => {
-            console.log(name + ' temperature: ' + temp);
+            this.emit('sensor_value', {type: 'temperature', value: temp, device: deviceConfig.name});
         });
         
         deviceProfilePeripheral.on('humidityNotif', (hum) => {
-            console.log(name + ' humidity: ' + hum);
+            this.emit('sensor_value', {type: 'humidity', value: hum, device: deviceConfig.name});
         });
 
         await deviceProfilePeripheral.connectAndSetUp()

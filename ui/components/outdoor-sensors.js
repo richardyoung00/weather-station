@@ -28,6 +28,46 @@ const template = (obj) => /*html*/
         font-size: 1.8em;
     }
 
+    #sensor-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2em;
+    }
+
+    .gg-battery {
+        box-sizing: border-box;
+        position: relative;
+        display: block;
+        margin-left: 12px;
+        width: 20px;
+        height: 12px;
+        
+        border: 2px solid;
+        border-radius: 3px;
+
+    }
+    .gg-battery .slider,
+    .gg-battery .point {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+        position: absolute;
+        height: 6px;
+        background: currentColor;
+        top: 1px
+    }
+    .gg-battery .point {
+        right: -4px;
+        border-radius: 3px;
+        width: 4px
+    }
+    .gg-battery .slider {
+        width: 0px;
+        left: 1px
+    }
+
 </style>
 
     <div id="temperature">
@@ -40,10 +80,20 @@ const template = (obj) => /*html*/
         <span>%</span>
     </div>
 
+    <div id="sensor-info">
+        <span id="sensor-name">-----</span>
+        <span class="gg-battery">
+            <span class="slider"></span>
+            <span class="point"></span>
+        </span>
+    </div>
+    
 
 `
 
 const REMOTE_SENSOR_TIMEOUT = 120000
+
+const BATTERY_ICON_WIDTH = 14;
 
 customElements.define('outdoor-sensors',
     class OutdoorSensors extends HTMLElement {
@@ -76,12 +126,20 @@ customElements.define('outdoor-sensors',
                     this.shadow.querySelector('#temperature-value').innerText = '---'
                 }, REMOTE_SENSOR_TIMEOUT)
             }
+
             if (data.type === 'humidity') {
                 this.shadow.querySelector('#humidity-value').innerText = data.value
                 clearTimeout(this.humTimeout)
                 this.humTimeout = setTimeout(() => {
                     this.shadow.querySelector('#humidity-value').innerText = '--'
                 }, REMOTE_SENSOR_TIMEOUT)
+            }
+
+            if (data.type === 'battery') {
+                this.shadow.querySelector('#sensor-name').innerText = data.device
+                const pixelWidth = (Number(data.value) / 100) * BATTERY_ICON_WIDTH
+                console.log( Math.round(pixelWidth))
+                this.shadow.querySelector('.slider').style.width = `${Math.round(pixelWidth)}px`
             }
         }
     }

@@ -65,12 +65,17 @@ export class RemoteSensorService extends events.EventEmitter  {
         deviceProfilePeripheral.on('humidityNotif', (hum) => {
             this.emit('sensor_value', {type: 'humidity', value: hum, device: deviceConfig.name, timestamp: Date.now()});
         });
+        
+        deviceProfilePeripheral.on('batteryLevelChange', (batt) => {
+            this.emit('sensor_value', {type: 'battery', value: batt, device: deviceConfig.name, timestamp: Date.now()});
+        });
 
         await deviceProfilePeripheral.connectAndSetUp()
         console.log(name + ' connected!');
         deviceConfig._connected = true;
         await deviceProfilePeripheral.enableTemperatureSensor(this.system_settings.remote_sensor_update_interval_ms)
         await deviceProfilePeripheral.enableHumiditySensor(this.system_settings.remote_sensor_update_interval_ms)
+        await deviceProfilePeripheral.enableBatteryLevelNotifications()
 
     }
 

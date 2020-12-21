@@ -60,4 +60,29 @@ export class DeviceProfile extends Thingy {
             })
         })    
     }
+
+    async enableBatteryLevelNotifications() {
+
+        await new Promise((resolve, reject) => {
+            this.notifyBatteryLevel((err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+        })
+
+        console.log("Battery notifications enabled")
+        
+        await new Promise((resolve, reject) => {
+            this.readBatteryLevel((err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+        })
+    }
 }

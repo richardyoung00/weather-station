@@ -576,3 +576,24 @@ Thingy.prototype.mic_disable = function(error) {
 // Util.mixin(Thingy, NobleDevice.BatteryService);
 //NobleDevice.Util.mixin(Thingy, NobleDevice.DeviceInformationService);
 
+var BATTERY_UUID                    = '180f';
+var BATTERY_LEVEL_UUID              = '2a19';
+
+
+Thingy.prototype.readBatteryLevel = function(callback) {
+  this.readUInt8Characteristic(BATTERY_UUID, BATTERY_LEVEL_UUID, callback);
+};
+
+Thingy.prototype.onBatteryLevelChange = function (data) {
+  this.emit('batteryLevelChange', data.readUInt8(0));
+};
+
+Thingy.prototype.notifyBatteryLevel = function (callback) {
+  this.onBatteryLevelChangeBinded       = this.onBatteryLevelChange.bind(this);
+  this.notifyCharacteristic(BATTERY_UUID, BATTERY_LEVEL_UUID, true, this.onBatteryLevelChangeBinded, callback);
+};
+
+Thingy.prototype.unnotifyBatteryLevel = function (callback) {
+  this.notifyCharacteristic(BATTERY_UUID, BATTERY_LEVEL_UUID, false, this.onBatteryLevelChangeBinded, callback);
+};
+

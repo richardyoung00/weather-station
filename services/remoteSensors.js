@@ -16,20 +16,21 @@ export class RemoteSensorService extends events.EventEmitter  {
         this.scanForUnconnectedDevicesAndConnect()
 
         setInterval(() => {
-            this.scanForUnconnectedDevicesAndConnect()
+            const unconnectedDevices = this.remote_sensors.filter(d => !d._connected)
+
+            if (unconnectedDevices.length > 0) {
+                console.log(`Looking for ${unconnectedDevices.length} devices`)
+                this.scanForUnconnectedDevicesAndConnect()
+            }
             
         }, this.system_settings.ble_scan_interval_ms)
 
         noble.on('discover', (peripheral) => {
             const unconnectedDevices = this.remote_sensors.filter(d => !d._connected)
-
             if (unconnectedDevices.length === 0) {
-                console.log('All devices connected')
                 return
             }
     
-            console.log(`Looking for ${unconnectedDevices.length} devices`)
-
             const matchingDevice = unconnectedDevices.find(d => d.mac_address.toLowerCase() === peripheral.address.toLowerCase())
             if (matchingDevice && peripheral.state === 'disconnected' && peripheral.connectable === true) {
                 matchingDevice._peripheral = peripheral;
@@ -58,11 +59,11 @@ export class RemoteSensorService extends events.EventEmitter  {
         });
         
         deviceProfilePeripheral.on('temperatureNotif', (temp) => {
-            this.emit('sensor_value', {type: 'temperature', value: temp, device: deviceConfig.name});
+            this.emit('sensor_value', {type: 'temperature', value: temp, device: deviceConfig.name, timestamp: Date.now()});
         });
         
         deviceProfilePeripheral.on('humidityNotif', (hum) => {
-            this.emit('sensor_value', {type: 'humidity', value: hum, device: deviceConfig.name});
+            this.emit('sensor_value', {type: 'humidity', value: hum, device: deviceConfig.name, timestamp: Date.now()});
         });
 
         await deviceProfilePeripheral.connectAndSetUp()

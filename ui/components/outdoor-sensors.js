@@ -31,17 +31,19 @@ const template = (obj) => /*html*/
 </style>
 
     <div id="temperature">
-        <span id="temperature-value">-</span>
+        <span id="temperature-value">---</span>
         <span id="temperature-symbol">°C</span>
     </div>
     <div id="humidity">
         <span>Humidity: </span>
-        <span id="humidity-value">-</span>
+        <span id="humidity-value">--</span>
         <span>%</span>
     </div>
 
 
 `
+
+const REMOTE_SENSOR_TIMEOUT = 120000
 
 customElements.define('outdoor-sensors',
     class OutdoorSensors extends HTMLElement {
@@ -50,9 +52,7 @@ customElements.define('outdoor-sensors',
             this.shadow = this.attachShadow({ mode: "open" });
 
             window.addEventListener('sensor_value', (e) => {
-
                 const data = e.detail;
-                console.log(data)
                 if (data.source === 'remote') {
                     this.updateValue(data)
                 }
@@ -69,14 +69,19 @@ customElements.define('outdoor-sensors',
         }
 
         updateValue(data) {
-            console.log('updating')
             if (data.type === 'temperature') {
-            console.log('t')
-
                 this.shadow.querySelector('#temperature-value').innerText = data.value.toFixed(1)
+                clearTimeout(this.tempTimeout)
+                this.tempTimeout = setTimeout(() => {
+                    this.shadow.querySelector('#temperature-value').innerText = '---'
+                }, REMOTE_SENSOR_TIMEOUT)
             }
             if (data.type === 'humidity') {
                 this.shadow.querySelector('#humidity-value').innerText = data.value
+                clearTimeout(this.humTimeout)
+                this.humTimeout = setTimeout(() => {
+                    this.shadow.querySelector('#humidity-value').innerText = '--'
+                }, REMOTE_SENSOR_TIMEOUT)
             }
         }
     }

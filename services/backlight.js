@@ -10,7 +10,7 @@ const SET_SCREEN_TIMEOUT = (timeout_s) => `xset -d :0 dpms 0 0 ${timeout_s}`
 const SET_SCREEN_BRIGHTNESS = (brightness_value) => `echo ${brightness_value} > /sys/class/backlight/rpi_backlight/brightness`
 
 const MAX_LUX_SQ = 10; // maximum achievalbe lux 
-const MIN_LUX_SQ = 2; // min achievable lux
+const MIN_LUX_SQ = 1; // min achievable lux
 
 const SCREEN_OFF_LUX_SQ = 2; 
 const NIGHT_TIME_SCREEN_TIMOUT_S = 5;

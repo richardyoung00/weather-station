@@ -8,13 +8,13 @@ const template = (obj) => /*html*/
     }
 
     #left {
-        flex: 40; 
+        flex: 50; 
         display: flex;
         flex-direction: column;
     }
     
     #right {
-        flex: 60; 
+        flex: 50; 
         display: flex;
         flex-direction: column;
     }

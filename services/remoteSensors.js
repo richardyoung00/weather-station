@@ -19,21 +19,17 @@ export class RemoteSensorService extends events.EventEmitter  {
             this.scanForUnconnectedDevicesAndConnect()
             
         }, this.system_settings.ble_scan_interval_ms)
-        
-    }
 
-    scanForUnconnectedDevicesAndConnect() {
-        const unconnectedDevices = this.remote_sensors.filter(d => !d._connected)
-        
-        if (unconnectedDevices.length === 0) {
-            console.log('All devices connected')
-            return
-        }
-
-        console.log(`Looking for ${unconnectedDevices.length} devices`)
-
-        //todo need to prevent memory leak by added more listeners
         noble.on('discover', (peripheral) => {
+            const unconnectedDevices = this.remote_sensors.filter(d => !d._connected)
+
+            if (unconnectedDevices.length === 0) {
+                console.log('All devices connected')
+                return
+            }
+    
+            console.log(`Looking for ${unconnectedDevices.length} devices`)
+
             const matchingDevice = unconnectedDevices.find(d => d.mac_address.toLowerCase() === peripheral.address.toLowerCase())
             if (matchingDevice && peripheral.state === 'disconnected' && peripheral.connectable === true) {
                 matchingDevice._peripheral = peripheral;
@@ -42,7 +38,11 @@ export class RemoteSensorService extends events.EventEmitter  {
                 console.log("Found device but is not connectable", peripheral.state, peripheral.connectable )
             }
         });
+        
+    }
 
+    scanForUnconnectedDevicesAndConnect() {
+        
         noble.startScanningAsync();
     }
 

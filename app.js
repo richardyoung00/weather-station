@@ -3,6 +3,7 @@ import Router from '@koa/router';
 import { RemoteSensorService }  from './services/remoteSensors.js';
 import { BacklightService }  from './services/backlight.js';
 import { LightSensorService }  from './services/local_sensors/lightSensor.js';
+import { TempHumiditySensorService }  from './services/local_sensors/tempHumiditySensor.js';
 import { readConfig } from './config/config.js';
 import serve from 'koa-static';
 
@@ -35,7 +36,6 @@ function setupWebServer() {
     httpServer.listen(PORT);
 }
 
-
 async function main() {
     const config = await readConfig();
     const remoteSensorService = new RemoteSensorService(config);
@@ -53,6 +53,12 @@ async function main() {
         backlightService.setAmbientLight(value.ambient_light, value.lux)
     })
     lightSensorService.start()
+
+    const tempHumidityService = new TempHumiditySensorService(config);
+    tempHumidityService.on('sensor_value', (value) => {
+        console.log(value.temperature, value.humidity)
+    })
+    tempHumidityService.start()
     
 
     

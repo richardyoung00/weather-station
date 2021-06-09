@@ -19,3 +19,13 @@ socket.on("connect", () => {
 socket.on("sensor_value", (value) => {
     window.dispatchEvent(new CustomEvent('sensor_value', { detail: value }))
 });
+
+function hideCursorForTouch() {
+    const isTouch = !!('ontouchstart' in window || navigator.maxTouchPoints)
+
+    if (isTouch) {
+        document.body.style.cursor = 'none'
+    }
+}
+
+hideCursorForTouch()

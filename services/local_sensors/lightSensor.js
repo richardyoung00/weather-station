@@ -25,8 +25,6 @@ export class LightSensorService extends events.EventEmitter {
         })
     }
 
-
-
     async start() {
         setInterval(() => {
             this.readSensor().then(value => {

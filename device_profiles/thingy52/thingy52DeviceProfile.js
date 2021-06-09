@@ -76,7 +76,8 @@ export class DeviceProfile extends Thingy {
         console.log("Battery notifications enabled")
         
         await new Promise((resolve, reject) => {
-            this.readBatteryLevel((err) => {
+            this.readBatteryLevel((err, data) => {
+                console.log('data', data)
                 if (err) {
                     reject(err)
                 } else {

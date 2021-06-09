@@ -1,5 +1,6 @@
 {
     "ble_scan_interval_ms": 30000,
     "remote_sensor_update_interval_ms": 30000,
-    "light_sensor_update_interval_ms": 4000
+    "light_sensor_update_interval_ms": 4000,
+    "temp_humidity_sensor_update_interval_ms": 10000
 }

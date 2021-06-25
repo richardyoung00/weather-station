@@ -16,8 +16,9 @@ socket.on("connect", () => {
     console.log("connected to server");
 });
 
-socket.on("sensor_value", (value) => {
-    window.dispatchEvent(new CustomEvent('sensor_value', { detail: value }))
+socket.on("data", (value) => {
+    console.log(value)
+    // window.dispatchEvent(new CustomEvent('sensor_value', { detail: value }))
 });
 
 function hideCursorForTouch() {

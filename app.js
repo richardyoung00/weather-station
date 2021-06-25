@@ -9,6 +9,7 @@ import serve from 'koa-static';
 
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { DataSyncService } from './services/dataSyncService.js';
 
 
 
@@ -38,10 +39,11 @@ function setupWebServer() {
 
 async function main() {
     const config = await readConfig();
+    const dataSyncService = new DataSyncService(io)
+
     const remoteSensorService = new RemoteSensorService(config);
     remoteSensorService.on('sensor_value', ({value, type, device}) => {
-        console.log(value, type, device)
-        io.emit("sensor_value", {value, type, device, source: "remote"});
+        dataSyncService.setRemoteSensorValue(device, type, value)
     })
     remoteSensorService.start()
 
@@ -51,12 +53,14 @@ async function main() {
     const lightSensorService = new LightSensorService(config);
     lightSensorService.on('sensor_value', (value) => {
         backlightService.setAmbientLight(value.ambient_light, value.lux)
+        dataSyncService.setLocalSensorValue('ambient_light', value.lux)
     })
     lightSensorService.start()
 
     const tempHumidityService = new TempHumiditySensorService(config);
     tempHumidityService.on('sensor_value', (value) => {
-        console.log(value.temperature, value.humidity)
+        dataSyncService.setLocalSensorValue('temperature', value.temperature)
+        dataSyncService.setLocalSensorValue('humidity', value.humidity)
     })
     tempHumidityService.start()
     

@@ -5,6 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
+    "dev": "npm run start & vite --config vite.config.js",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +25,8 @@
     "koa": "^2.13.0",
     "koa-static": "^5.0.0",
     "socket.io": "^3.0.4"
+  },
+  "devDependencies": {
+    "vite": "^2.3.8"
   }
 }

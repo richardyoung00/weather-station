@@ -1,2 +1,4 @@
 bluepy
 flask
+adafruit-circuitpython-veml7700
+adafruit-circuitpython-dht
